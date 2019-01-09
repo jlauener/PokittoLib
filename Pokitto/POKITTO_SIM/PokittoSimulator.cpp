@@ -269,7 +269,7 @@ void Simulator::initSDLGfx() {
         SDL_FreeSurface(Loading_Surf); /* we got the texture now -> free surface */
     #endif // SIM_SHOWDEVICE
 
-    SDL_TimerID rfrsh = SDL_AddTimer(100, rfrsh_callback, NULL);
+    SDL_TimerID rfrsh = SDL_AddTimer(POK_FRAMEDURATION, rfrsh_callback, NULL);
 }
 
 void Simulator::waitSDL(uint16_t t) {

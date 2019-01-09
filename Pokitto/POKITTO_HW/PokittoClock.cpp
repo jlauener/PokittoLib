@@ -51,7 +51,7 @@ void SysTick_Handler(void) {
     a = *ptimer;
     *ptimer = a + 1;
     #endif
-    pt_count+=10;                        // increment counter
+    pt_count+=1;                        // increment counter
 }}
 
 using namespace Pokitto;
@@ -67,7 +67,7 @@ void Core::initClock() {
     #ifdef _OSCT
     SysTick->LOAD = (480000*3/_OSCT)-1;
     #else
-    SysTick->LOAD = 480000-1;
+    SysTick->LOAD = 48000-1;
     #endif
     #endif
     SysTick->VAL  = 0;

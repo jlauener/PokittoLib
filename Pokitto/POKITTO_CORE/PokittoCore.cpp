@@ -604,7 +604,6 @@ void Core::begin() {
 
     init(); // original functions
     timePerFrame = POK_FRAMEDURATION;
-	//nextFrameMillis = 0;
 	//frameCount = 0;
 	frameEndMicros = 1;
 	startMenuTimer = 255;
@@ -623,16 +622,16 @@ void Core::begin() {
 	    eeprom_write_byte((uint16_t*)EESETTINGS_SKIPINTRO, !(logoFlag&1));
 	}
 	logoFlag &= 1;
-	
+
 	#if POK_DISPLAYLOGO
         #if PROJ_DEVELOPER_MODE != 1
-	if( logoFlag == 0 ){	
+	if( logoFlag == 0 ){
 	    showLogo();
 	}
         #endif // PROJ_DEVELOPER_MODE
 	#endif // POK_DISPLAYLOGO
 
-	
+
 	display.enableDirectPrinting(true);
     display.directbgcolor = COLOR_BLACK;
     display.clearLCD();
@@ -675,7 +674,7 @@ void Core::begin() {
 	}
 
 	#endif
-	
+
 	display.enableDirectPrinting(false);
 	display.adjustCharStep=1;
 	display.adjustLineStep=1;
@@ -891,6 +890,8 @@ void Core::titleScreen(const char*  name, const uint8_t *logo){
 	}
 }
 
+bool firstFrame = true;
+
 /**
  * Update all the subsystems, like graphics, audio, events, etc.
  * Note: the update rect is used for drawing only part of the screen buffer to LCD. Because of speed optimizations,
@@ -909,8 +910,15 @@ bool Core::update(bool useDirectMode, uint8_t updRectX, uint8_t updRectY, uint8_
     #endif
 
     uint32_t now = getTime();
+
+    if (firstFrame)
+    {
+      nextFrameMillis = now;
+      firstFrame = false;
+    }
+
 	if ((((nextFrameMillis - now)) > timePerFrame) && frameEndMicros) { //if time to render a new frame is reached and the frame end has ran once
-		nextFrameMillis = now + timePerFrame;
+		nextFrameMillis += timePerFrame;
 		frameCount++;
 
 		frameEndMicros = 0;
